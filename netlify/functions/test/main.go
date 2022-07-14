@@ -39,8 +39,9 @@ func readResolv() {
 }
 
 func digServices() {
-	search := "ec2.internal"
-	cmd := exec.Command("dig", "+noall", "+answer", "srv", "any.any."+search)
+	//search := "ec2.internal"
+	//cmd := exec.Command("dig", "+noall", "+answer", "srv", "any.any."+search)
+	cmd := exec.Command("lsb_release", "-a")
 	out, err := cmd.CombinedOutput()
 	if err != nil {
 		fmt.Println("failed to exec \"dig\" command!")
