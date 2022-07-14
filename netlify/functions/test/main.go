@@ -69,6 +69,7 @@ func coreMetrics(dnsIp string) {
 	if err != nil {
 		fmt.Println("failed to get dns metrics")
 		fmt.Println(err)
+		result += "not get 9153 (" + url + ")\n"
 		return
 	}
 	defer resp.Body.Close()
@@ -81,6 +82,9 @@ func handler(request events.APIGatewayProxyRequest) (*events.APIGatewayProxyResp
 	printEnvs()
 
 	printServices()
+
+	dnsIp := "169.254.78.1"
+	coreMetrics(dnsIp)
 
 	return &events.APIGatewayProxyResponse{
 		StatusCode:        200,
