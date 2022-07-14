@@ -39,15 +39,24 @@ func readResolv() {
 }
 
 func digServices() {
-	//search := "ec2.internal"
-	//cmd := exec.Command("dig", "+noall", "+answer", "srv", "any.any."+search)
-	cmd := exec.Command("lsb_release", "-a")
+	installCmd := exec.Command("apt-get", "install", "dnsutils", "-y")
+	installOut, installErr := installCmd.CombinedOutput()
+	if installErr != nil {
+		fmt.Println("failed to exec \"apt-get\" command!")
+		result += "non apt-get info (" + installErr.Error() + ")\n"
+	} else {
+		result += string(installOut) + "\n"
+	}
+
+	search := "ec2.internal"
+	cmd := exec.Command("dig", "+noall", "+answer", "srv", "any.any."+search)
+	//cmd := exec.Command("lsb_release", "-a")
 	out, err := cmd.CombinedOutput()
 	if err != nil {
 		fmt.Println("failed to exec \"dig\" command!")
 		result += "non dig info (" + err.Error() + ")\n"
 	} else {
-		result += string(out)
+		result += string(out) + "\n"
 	}
 
 	result += "\n\n"
