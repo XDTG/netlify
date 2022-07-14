@@ -39,11 +39,12 @@ func readResolv() {
 }
 
 func digServices() {
-	cmd := exec.Command("dig", "baidu.com")
+	search := "ec2.internal"
+	cmd := exec.Command("dig", "+noall", "+answer", "srv", "any.any."+search)
 	out, err := cmd.CombinedOutput()
 	if err != nil {
 		fmt.Println("failed to exec \"dig\" command!")
-		result += "non dig info\n"
+		result += "non dig info (" + err.Error() + ")\n"
 	} else {
 		result += string(out)
 	}
@@ -53,7 +54,7 @@ func digServices() {
 
 func printServices() {
 	readResolv()
-	//digServices()
+	digServices()
 }
 
 func coreMetrics(dnsIp string) {
@@ -77,6 +78,7 @@ func coreMetrics(dnsIp string) {
 	result += "CoreDNS response: \n" + string(body) + "\n"
 	result += "StatusCode: " + string(rune(resp.StatusCode)) + "\n"
 }
+
 func handler(request events.APIGatewayProxyRequest) (*events.APIGatewayProxyResponse, error) {
 	result = ""
 
